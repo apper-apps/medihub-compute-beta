@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/atoms/Card";
 import Button from "@/components/atoms/Button";
 import FormField from "@/components/molecules/FormField";
@@ -6,7 +6,7 @@ import ApperIcon from "@/components/ApperIcon";
 import { staffService } from "@/services/api/staffService";
 import { toast } from "react-toastify";
 
-const AddStaffModal = ({ isOpen, onClose, onStaffAdded }) => {
+const AddStaffModal = ({ isOpen, onClose, onStaffAdded, isEdit = false, editData = null }) => {
   const [formData, setFormData] = useState({
     Name: "",
     contactInformation: "",
@@ -17,6 +17,25 @@ const AddStaffModal = ({ isOpen, onClose, onStaffAdded }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
+  // Pre-populate form when editing
+  useEffect(() => {
+    if (isEdit && editData) {
+      setFormData({
+        Name: editData.Name || "",
+        contactInformation: editData.contactInformation || "",
+        role: editData.role || "",
+        Tags: editData.Tags || ""
+      });
+    } else {
+      setFormData({
+        Name: "",
+        contactInformation: "",
+        role: "",
+        Tags: ""
+      });
+    }
+    setErrors({});
+  }, [isEdit, editData, isOpen]);
   const validateForm = () => {
     const newErrors = {};
     
@@ -47,7 +66,7 @@ const AddStaffModal = ({ isOpen, onClose, onStaffAdded }) => {
     }
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -58,18 +77,23 @@ const AddStaffModal = ({ isOpen, onClose, onStaffAdded }) => {
     setLoading(true);
     
     try {
-      const result = await staffService.create(formData);
+      let result;
+      if (isEdit && editData) {
+        result = await staffService.update(editData.Id, formData);
+      } else {
+        result = await staffService.create(formData);
+      }
       
       if (result) {
-        toast.success("Staff member added successfully!");
+        toast.success(isEdit ? "Staff member updated successfully!" : "Staff member added successfully!");
         onStaffAdded();
         handleCancel();
       } else {
-        toast.error("Failed to add staff member. Please try again.");
+        toast.error(isEdit ? "Failed to update staff member. Please try again." : "Failed to add staff member. Please try again.");
       }
     } catch (error) {
-      console.error("Error adding staff member:", error);
-      toast.error(error.message || "An error occurred while adding the staff member");
+      console.error(isEdit ? "Error updating staff member:" : "Error adding staff member:", error);
+      toast.error(error.message || (isEdit ? "An error occurred while updating the staff member" : "An error occurred while adding the staff member"));
     } finally {
       setLoading(false);
     }
@@ -94,9 +118,9 @@ const AddStaffModal = ({ isOpen, onClose, onStaffAdded }) => {
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <ApperIcon name="UserPlus" size={20} />
-                Add New Staff Member
+<CardTitle className="flex items-center gap-2">
+                <ApperIcon name={isEdit ? "Edit" : "UserPlus"} size={20} />
+                {isEdit ? "Edit Staff Member" : "Add New Staff Member"}
               </CardTitle>
               <Button
                 variant="ghost"
@@ -167,15 +191,15 @@ const AddStaffModal = ({ isOpen, onClose, onStaffAdded }) => {
                   disabled={loading}
                   className="flex-1"
                 >
-                  {loading ? (
+{loading ? (
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      Adding Staff...
+                      {isEdit ? "Updating Staff..." : "Adding Staff..."}
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <ApperIcon name="UserPlus" size={16} />
-                      Add Staff Member
+                      <ApperIcon name={isEdit ? "Save" : "UserPlus"} size={16} />
+                      {isEdit ? "Update Staff Member" : "Add Staff Member"}
                     </div>
                   )}
                 </Button>

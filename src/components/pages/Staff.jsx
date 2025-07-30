@@ -9,11 +9,11 @@ import Button from "@/components/atoms/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/atoms/Card";
 
 const Staff = () => {
-  const [staff, setStaff] = useState([]);
+const [staff, setStaff] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
+  const [editingStaff, setEditingStaff] = useState(null);
   const fetchStaff = async () => {
     setLoading(true);
     setError(null);
@@ -34,9 +34,20 @@ const Staff = () => {
     fetchStaff();
   }, []);
 
-  const handleStaffAdded = () => {
+const handleStaffAdded = () => {
     setShowModal(false);
+    setEditingStaff(null);
     fetchStaff();
+  };
+
+  const handleStaffEdit = (staffMember) => {
+    setEditingStaff(staffMember);
+    setShowModal(true);
+  };
+
+  const handleAddNew = () => {
+    setEditingStaff(null);
+    setShowModal(true);
   };
 
   return (
@@ -48,9 +59,9 @@ const Staff = () => {
             Manage hospital staff information and schedules
           </p>
         </div>
-        <Button 
+<Button 
           className="flex items-center space-x-2"
-          onClick={() => setShowModal(true)}
+          onClick={handleAddNew}
         >
           <ApperIcon name="Plus" className="h-4 w-4" />
           <span>Add Staff Member</span>
@@ -82,7 +93,7 @@ const Staff = () => {
             <ApperIcon name="Users" size={48} className="text-slate-400 mb-4" />
             <h3 className="text-lg font-semibold text-slate-900 mb-2">No Staff Members</h3>
             <p className="text-slate-600 mb-4">Get started by adding your first staff member</p>
-            <Button onClick={() => setShowModal(true)}>
+<Button onClick={handleAddNew}>
               <ApperIcon name="Plus" size={16} className="mr-2" />
               Add Staff Member
             </Button>
@@ -103,7 +114,7 @@ const Staff = () => {
                   </div>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+<CardContent>
                 <div className="space-y-3">
                   {member.contactInformation && (
                     <div className="flex items-center gap-2">
@@ -126,6 +137,17 @@ const Staff = () => {
                       </div>
                     </div>
                   )}
+                  <div className="pt-3 border-t flex justify-end">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleStaffEdit(member)}
+                      className="flex items-center gap-2 text-slate-600 hover:text-slate-900"
+                    >
+                      <ApperIcon name="Edit" size={14} />
+                      Edit
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -133,10 +155,12 @@ const Staff = () => {
         </div>
       )}
 
-      <AddStaffModal
+<AddStaffModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         onStaffAdded={handleStaffAdded}
+        isEdit={!!editingStaff}
+        editData={editingStaff}
       />
     </div>
   );
