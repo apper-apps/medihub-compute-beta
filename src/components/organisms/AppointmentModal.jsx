@@ -6,7 +6,7 @@ import Label from '@/components/atoms/Label';
 import ApperIcon from '@/components/ApperIcon';
 import { toast } from 'react-toastify';
 import appointmentService from '@/services/api/appointmentService';
-import patientsService from '@/services/api/patientsService';
+import { patientsService } from '@/services/api/patientsService';
 
 const AppointmentModal = ({ 
   isOpen, 
