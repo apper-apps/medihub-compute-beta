@@ -10,14 +10,16 @@ import Empty from "@/components/ui/Empty";
 import ApperIcon from "@/components/ApperIcon";
 import { patientsService } from "@/services/api/patientsService";
 import { toast } from "react-toastify";
+import AddPatientModal from "@/components/organisms/AddPatientModal";
 
 const Patients = () => {
   const navigate = useNavigate();
-  const [patients, setPatients] = useState([]);
+const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const loadPatients = async () => {
     try {
@@ -50,8 +52,17 @@ const Patients = () => {
     }
   }, [searchQuery, patients]);
 
-  const handleAddPatient = () => {
-    toast.info("Add Patient functionality would be implemented here");
+const handleAddPatient = () => {
+    setShowAddModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowAddModal(false);
+  };
+
+  const handlePatientAdded = () => {
+    loadPatients(); // Refresh the patient list
+    setShowAddModal(false);
   };
 
   if (loading) return <Loading />;
@@ -153,7 +164,7 @@ const Patients = () => {
         </div>
       </div>
 
-      {/* Patient Table */}
+{/* Patient Table */}
       <Card>
         <CardHeader>
           <CardTitle>Patient Records</CardTitle>
@@ -172,6 +183,15 @@ const Patients = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Add Patient Modal */}
+      {showAddModal && (
+        <AddPatientModal
+          isOpen={showAddModal}
+          onClose={handleCloseModal}
+          onPatientAdded={handlePatientAdded}
+        />
+      )}
     </div>
   );
 };
