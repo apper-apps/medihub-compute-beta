@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/atoms/Card";
 import Button from "@/components/atoms/Button";
 import ApperIcon from "@/components/ApperIcon";
+import { toast } from "react-toastify";
 
 const Appointments = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleViewCalendar = async () => {
+    setIsLoading(true);
+    // Simulate calendar loading - replace with actual calendar navigation/display logic
+    setTimeout(() => {
+      toast.info("Calendar view is coming soon! Full appointment scheduling will be available in the next update.");
+      setIsLoading(false);
+    }, 1000);
+  };
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -31,10 +43,19 @@ const Appointments = () => {
             Schedule, manage, and track patient appointments with an integrated calendar system. 
             View daily, weekly, and monthly schedules with automated reminders.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button>
-              <ApperIcon name="Calendar" className="h-4 w-4 mr-2" />
-              View Calendar
+<div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button onClick={handleViewCalendar} disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <ApperIcon name="Loader2" className="h-4 w-4 mr-2 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                <>
+                  <ApperIcon name="Calendar" className="h-4 w-4 mr-2" />
+                  View Calendar
+                </>
+              )}
             </Button>
             <Button variant="outline">
               <ApperIcon name="Clock" className="h-4 w-4 mr-2" />
