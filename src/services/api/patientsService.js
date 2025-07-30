@@ -10,11 +10,12 @@ const getApperClient = () => {
 };
 
 export const patientsService = {
-  async getAll() {
+async getAll() {
     try {
       const apperClient = getApperClient();
       const params = {
         fields: [
+          { field: { Name: "Id" } },
           { field: { Name: "Name" } },
           { field: { Name: "Tags" } },
           { field: { Name: "Owner" } },
