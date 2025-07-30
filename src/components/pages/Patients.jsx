@@ -65,6 +65,66 @@ const handleAddPatient = () => {
     setShowAddModal(false);
   };
 
+  const handleExport = async () => {
+    try {
+      setLoading(true);
+      
+      // Prepare CSV headers
+      const headers = [
+        'ID', 'Name', 'Age', 'Gender', 'Phone', 'Emergency Contact',
+        'Admission Date', 'Assigned Doctor', 'Status', 'Room Number',
+        'Diagnosis', 'Blood Type', 'Tags'
+      ];
+      
+      // Prepare CSV data
+      const csvData = patients.map(patient => [
+        patient.Id || '',
+        patient.Name || '',
+        patient.age || '',
+        patient.gender || '',
+        patient.phone || '',
+        patient.emergency || '',
+        patient.admissionDate || '',
+        patient.assignedDoctor || '',
+        patient.status || '',
+        patient.roomNumber || '',
+        patient.diagnosis || '',
+        patient.bloodType || '',
+        patient.Tags || ''
+      ]);
+      
+      // Create CSV content
+      const csvContent = [
+        headers.join(','),
+        ...csvData.map(row => 
+          row.map(field => 
+            typeof field === 'string' && field.includes(',') 
+              ? `"${field}"` 
+              : field
+          ).join(',')
+        )
+      ].join('\n');
+      
+      // Create and download file
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', `patients_export_${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast.success('Patient data exported successfully');
+    } catch (error) {
+      console.error('Export failed:', error);
+      toast.error('Failed to export patient data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) return <Loading />;
   if (error) return <Error message={error} onRetry={loadPatients} />;
 
@@ -101,7 +161,7 @@ const handleAddPatient = () => {
                 <ApperIcon name="Filter" className="h-4 w-4 mr-2" />
                 Filter
               </Button>
-              <Button variant="outline" size="sm">
+<Button variant="outline" size="sm" onClick={handleExport}>
                 <ApperIcon name="Download" className="h-4 w-4 mr-2" />
                 Export
               </Button>
