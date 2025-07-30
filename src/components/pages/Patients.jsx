@@ -40,13 +40,35 @@ const [patients, setPatients] = useState([]);
     loadPatients();
   }, []);
 
-  useEffect(() => {
+useEffect(() => {
     if (!searchQuery.trim()) {
       setFilteredPatients(patients);
-} else {
+    } else {
+      const query = searchQuery.toLowerCase();
       const filtered = patients.filter(patient => 
-        patient.Name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        patient.Id?.toString().includes(searchQuery)
+        // Search by name and ID (existing functionality)
+        patient.Name?.toLowerCase().includes(query) ||
+        patient.Id?.toString().includes(query) ||
+        // Search by status
+        patient.status?.toLowerCase().includes(query) ||
+        // Search by assigned doctor
+        patient.assignedDoctor?.toLowerCase().includes(query) ||
+        // Search by diagnosis
+        patient.diagnosis?.toLowerCase().includes(query) ||
+        // Search by blood type
+        patient.bloodType?.toLowerCase().includes(query) ||
+        // Search by room number
+        patient.roomNumber?.toLowerCase().includes(query) ||
+        // Search by gender
+        patient.gender?.toLowerCase().includes(query) ||
+        // Search by phone
+        patient.phone?.includes(query) ||
+        // Search by emergency contact
+        patient.emergency?.toLowerCase().includes(query) ||
+        // Search by owner name (lookup field)
+        patient.Owner?.Name?.toLowerCase().includes(query) ||
+        // Search by tags
+        patient.Tags?.toLowerCase().includes(query)
       );
       setFilteredPatients(filtered);
     }
