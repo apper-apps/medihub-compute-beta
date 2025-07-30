@@ -8,13 +8,20 @@ export const patientsService = {
     return [...patientsData];
   },
 
-  async getById(id) {
+async getById(id) {
     await delay(250);
     const patient = patientsData.find(p => p.Id === id);
     if (!patient) {
       throw new Error("Patient not found");
     }
     return { ...patient };
+  },
+
+  async getPatientActivities(patientId) {
+    await delay(200);
+    const { activitiesService } = await import('./activitiesService');
+    const allActivities = await activitiesService.getAll();
+    return allActivities.filter(activity => activity.patientId === patientId);
   },
 
   async create(patientData) {

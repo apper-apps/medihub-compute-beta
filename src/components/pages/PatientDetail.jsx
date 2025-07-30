@@ -8,10 +8,10 @@ import FormField from "@/components/molecules/FormField";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 import ApperIcon from "@/components/ApperIcon";
+import ActivityTimeline from "@/components/organisms/ActivityTimeline";
 import { patientsService } from "@/services/api/patientsService";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
-
 const PatientDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -23,13 +23,14 @@ const PatientDetail = () => {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({});
 
-  const tabs = [
+const tabs = [
     { id: "overview", label: "Overview" },
     { id: "medical-history", label: "Medical History" },
     { id: "treatment", label: "Current Treatment" },
     { id: "medications", label: "Medications" },
     { id: "lab-results", label: "Lab Results" },
-    { id: "notes", label: "Notes" }
+    { id: "notes", label: "Notes" },
+    { id: "activity", label: "Activity" }
   ];
 
   const loadPatient = async () => {
@@ -187,6 +188,24 @@ const PatientDetail = () => {
     </Card>
   );
 
+const renderActivityTab = () => {
+    return (
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ApperIcon name="Activity" size={20} />
+              Patient Activity Timeline
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ActivityTimeline patientId={patient?.Id} />
+          </CardContent>
+        </Card>
+      </div>
+    );
+  };
+
   const renderActiveTab = () => {
     switch (activeTab) {
       case "overview":
@@ -201,6 +220,8 @@ const PatientDetail = () => {
         return renderPlaceholderTab("Lab Results", "View and track laboratory test results and medical reports.");
       case "notes":
         return renderPlaceholderTab("Clinical Notes", "Add and review clinical notes, observations, and care instructions.");
+      case "activity":
+        return renderActivityTab();
       default:
         return renderOverviewTab();
     }

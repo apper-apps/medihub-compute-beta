@@ -4,55 +4,79 @@
     "type": "admission",
     "description": "New patient admitted to Emergency Department",
     "timestamp": "2024-01-21T14:30:00Z",
-    "user": "Dr. Sarah Johnson"
+    "user": "Dr. Sarah Johnson",
+    "patientId": 1
   },
   {
     "Id": 2,
-    "type": "discharge",
-    "description": "Patient discharged from General Ward - Recovery complete",
-    "timestamp": "2024-01-21T13:15:00Z",
-    "user": "Dr. Michael Chen"
+    "type": "update",
+    "description": "Medical history updated - Added allergy information",
+    "timestamp": "2024-01-21T13:45:00Z",
+    "user": "Nurse Patricia",
+    "patientId": 1
   },
   {
     "Id": 3,
-    "type": "appointment",
-    "description": "Cardiac consultation scheduled for tomorrow",
-    "timestamp": "2024-01-21T12:45:00Z",
-    "user": "Nurse Patricia"
+    "type": "prescription",
+    "description": "New medication prescribed for hypertension",
+    "timestamp": "2024-01-21T12:30:00Z",
+    "user": "Dr. Lisa Park",
+    "patientId": 1
   },
   {
     "Id": 4,
-    "type": "treatment",
-    "description": "Surgical procedure completed successfully",
-    "timestamp": "2024-01-21T11:20:00Z",
-    "user": "Dr. James Lee"
+    "type": "appointment",
+    "description": "Follow-up appointment scheduled for next week",
+    "timestamp": "2024-01-21T11:15:00Z",
+    "user": "Receptionist Maria",
+    "patientId": 1
   },
   {
     "Id": 5,
-    "type": "prescription",
-    "description": "New medication prescribed for hypertension patient",
-    "timestamp": "2024-01-21T10:30:00Z",
-    "user": "Dr. Lisa Park"
+    "type": "discharge",
+    "description": "Patient discharged from General Ward - Recovery complete",
+    "timestamp": "2024-01-20T16:30:00Z",
+    "user": "Dr. Michael Chen",
+    "patientId": 2
   },
   {
     "Id": 6,
-    "type": "admission",
-    "description": "Emergency admission - Stroke patient transferred to ICU",
-    "timestamp": "2024-01-21T09:15:00Z",
-    "user": "Dr. Michael Chen"
+    "type": "treatment",
+    "description": "Surgical procedure completed successfully",
+    "timestamp": "2024-01-20T09:20:00Z",
+    "user": "Dr. James Lee",
+    "patientId": 2
   },
   {
     "Id": 7,
-    "type": "treatment",
-    "description": "Physical therapy session completed",
-    "timestamp": "2024-01-21T08:45:00Z",
-    "user": "Therapist Alex"
+    "type": "update",
+    "description": "Emergency contact information updated",
+    "timestamp": "2024-01-19T14:15:00Z",
+    "user": "Admin Sarah",
+    "patientId": 3
   },
   {
     "Id": 8,
-    "type": "appointment",
-    "description": "Follow-up appointment scheduled for post-surgery patient",
-    "timestamp": "2024-01-21T08:00:00Z",
-    "user": "Receptionist Maria"
+    "type": "admission",
+    "description": "Emergency admission - Stroke patient transferred to ICU",
+    "timestamp": "2024-01-19T09:15:00Z",
+    "user": "Dr. Michael Chen",
+    "patientId": 3
+  },
+  {
+    "Id": 9,
+    "type": "lab-result",
+    "description": "Blood test results uploaded and reviewed",
+    "timestamp": "2024-01-21T10:45:00Z",
+    "user": "Lab Tech John",
+    "patientId": 1
+  },
+  {
+    "Id": 10,
+    "type": "note",
+    "description": "Clinical notes added for post-surgery monitoring",
+    "timestamp": "2024-01-20T13:20:00Z",
+    "user": "Nurse Kelly",
+    "patientId": 2
   }
 ]
