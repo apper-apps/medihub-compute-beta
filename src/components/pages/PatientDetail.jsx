@@ -87,11 +87,11 @@ const tabs = [
           <CardTitle>Personal Information</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <FormField
-            id="name"
+<FormField
+            id="Name"
             label="Full Name"
-            value={editMode ? formData.name : patient.name}
-            onChange={(e) => handleInputChange("name", e.target.value)}
+            value={editMode ? formData.Name : patient.Name}
+            onChange={(e) => handleInputChange("Name", e.target.value)}
             disabled={!editMode}
             required
           />
@@ -240,7 +240,7 @@ const renderActivityTab = () => {
             <ApperIcon name="ArrowLeft" className="h-5 w-5" />
           </Button>
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">{patient.name}</h1>
+<h1 className="text-3xl font-bold text-slate-900">{patient.Name}</h1>
             <p className="text-slate-600">
               Patient ID #{patient.Id.toString().padStart(4, "0")} • 
               Admitted {format(new Date(patient.admissionDate), "MMMM dd, yyyy")}

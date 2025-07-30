@@ -41,10 +41,10 @@ const Patients = () => {
   useEffect(() => {
     if (!searchQuery.trim()) {
       setFilteredPatients(patients);
-    } else {
+} else {
       const filtered = patients.filter(patient => 
-        patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        patient.Id.toString().includes(searchQuery)
+        patient.Name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        patient.Id?.toString().includes(searchQuery)
       );
       setFilteredPatients(filtered);
     }
