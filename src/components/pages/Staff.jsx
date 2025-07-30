@@ -1,12 +1,46 @@
-import React from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/atoms/Card";
-import Button from "@/components/atoms/Button";
+import React, { useEffect, useState } from "react";
+import AddStaffModal from "@/components/organisms/AddStaffModal";
+import { staffService } from "@/services/api/staffService";
+import { toast } from "react-toastify";
 import ApperIcon from "@/components/ApperIcon";
+import Loading from "@/components/ui/Loading";
+import Error from "@/components/ui/Error";
+import Button from "@/components/atoms/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/atoms/Card";
 
 const Staff = () => {
+  const [staff, setStaff] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const fetchStaff = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const result = await staffService.getAll();
+      setStaff(result || []);
+    } catch (err) {
+      console.error("Error fetching staff:", err);
+      setError("Failed to load staff members");
+      toast.error("Failed to load staff members");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStaff();
+  }, []);
+
+  const handleStaffAdded = () => {
+    setShowModal(false);
+    fetchStaff();
+  };
+
   return (
     <div className="space-y-6">
-      {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900">Staff Directory</h1>
@@ -14,174 +48,96 @@ const Staff = () => {
             Manage hospital staff information and schedules
           </p>
         </div>
-        <Button className="flex items-center space-x-2">
+        <Button 
+          className="flex items-center space-x-2"
+          onClick={() => setShowModal(true)}
+        >
           <ApperIcon name="Plus" className="h-4 w-4" />
           <span>Add Staff Member</span>
         </Button>
       </div>
 
-      {/* Placeholder Content */}
-      <Card>
-        <CardContent className="text-center py-16">
-          <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6">
-            <ApperIcon name="UserCheck" className="h-10 w-10 text-emerald-500" />
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="flex items-center gap-3">
+            <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-slate-600">Loading staff members...</span>
           </div>
-          <h3 className="text-xl font-semibold text-slate-900 mb-3">Staff Management</h3>
-          <p className="text-slate-600 max-w-md mx-auto mb-6">
-            Comprehensive staff directory with roles, departments, schedules, and contact information. 
-            Track availability and manage shift assignments efficiently.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button>
-              <ApperIcon name="Users" className="h-4 w-4 mr-2" />
-              View All Staff
-            </Button>
-            <Button variant="outline">
-              <ApperIcon name="Search" className="h-4 w-4 mr-2" />
-              Search Directory
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Department Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="hover:shadow-medium transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <ApperIcon name="Stethoscope" className="h-5 w-5 text-primary-500" />
-              <span>Doctors</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-slate-900">24</p>
-            <p className="text-slate-600 text-sm">Licensed physicians</p>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-medium transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <ApperIcon name="Heart" className="h-5 w-5 text-red-500" />
-              <span>Nurses</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-slate-900">48</p>
-            <p className="text-slate-600 text-sm">Registered nurses</p>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-medium transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <ApperIcon name="Clipboard" className="h-5 w-5 text-sky-500" />
-              <span>Technicians</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-slate-900">16</p>
-            <p className="text-slate-600 text-sm">Medical technicians</p>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-medium transition-shadow">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <ApperIcon name="Users" className="h-5 w-5 text-amber-500" />
-              <span>Support</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-slate-900">32</p>
-            <p className="text-slate-600 text-sm">Support staff</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Feature Preview */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        </div>
+      ) : error ? (
         <Card>
-          <CardHeader>
-            <CardTitle>Staff Features</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-primary-50 rounded-lg flex items-center justify-center">
-                <ApperIcon name="User" className="h-4 w-4 text-primary-600" />
-              </div>
-              <div>
-                <p className="font-medium text-slate-900">Staff Profiles</p>
-                <p className="text-sm text-slate-600">Complete staff information and credentials</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center">
-                <ApperIcon name="Calendar" className="h-4 w-4 text-emerald-600" />
-              </div>
-              <div>
-                <p className="font-medium text-slate-900">Shift Management</p>
-                <p className="text-sm text-slate-600">Schedule and track staff shifts</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-amber-50 rounded-lg flex items-center justify-center">
-                <ApperIcon name="Award" className="h-4 w-4 text-amber-600" />
-              </div>
-              <div>
-                <p className="font-medium text-slate-900">Certifications</p>
-                <p className="text-sm text-slate-600">Track licenses and certifications</p>
-              </div>
-            </div>
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <ApperIcon name="AlertCircle" size={48} className="text-red-500 mb-4" />
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">Error Loading Staff</h3>
+            <p className="text-slate-600 mb-4">{error}</p>
+            <Button onClick={fetchStaff}>
+              <ApperIcon name="RefreshCw" size={16} className="mr-2" />
+              Try Again
+            </Button>
           </CardContent>
         </Card>
-
+      ) : staff.length === 0 ? (
         <Card>
-          <CardHeader>
-            <CardTitle>Department Distribution</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-slate-600">Emergency</span>
-                  <span className="text-slate-900">18 staff</span>
-                </div>
-                <div className="w-full bg-slate-200 rounded-full h-2">
-                  <div className="bg-red-500 h-2 rounded-full" style={{ width: "15%" }}></div>
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-slate-600">Surgery</span>
-                  <span className="text-slate-900">24 staff</span>
-                </div>
-                <div className="w-full bg-slate-200 rounded-full h-2">
-                  <div className="bg-primary-500 h-2 rounded-full" style={{ width: "20%" }}></div>
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-slate-600">General Ward</span>
-                  <span className="text-slate-900">36 staff</span>
-                </div>
-                <div className="w-full bg-slate-200 rounded-full h-2">
-                  <div className="bg-emerald-500 h-2 rounded-full" style={{ width: "30%" }}></div>
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-slate-600">ICU</span>
-                  <span className="text-slate-900">22 staff</span>
-                </div>
-                <div className="w-full bg-slate-200 rounded-full h-2">
-                  <div className="bg-amber-500 h-2 rounded-full" style={{ width: "18%" }}></div>
-                </div>
-              </div>
-            </div>
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <ApperIcon name="Users" size={48} className="text-slate-400 mb-4" />
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">No Staff Members</h3>
+            <p className="text-slate-600 mb-4">Get started by adding your first staff member</p>
+            <Button onClick={() => setShowModal(true)}>
+              <ApperIcon name="Plus" size={16} className="mr-2" />
+              Add Staff Member
+            </Button>
           </CardContent>
         </Card>
-      </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {staff.map((member) => (
+            <Card key={member.Id} className="hover:shadow-medium transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
+                    <ApperIcon name="User" size={20} className="text-primary-600" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-slate-900">{member.Name}</h3>
+                    <p className="text-sm text-slate-600 font-normal">{member.role}</p>
+                  </div>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {member.contactInformation && (
+                    <div className="flex items-center gap-2">
+                      <ApperIcon name="Phone" size={16} className="text-slate-400" />
+                      <span className="text-sm text-slate-600">{member.contactInformation}</span>
+                    </div>
+                  )}
+                  {member.Tags && (
+                    <div className="flex items-start gap-2">
+                      <ApperIcon name="Tag" size={16} className="text-slate-400 mt-0.5" />
+                      <div className="flex flex-wrap gap-1">
+                        {member.Tags.split(',').map((tag, index) => (
+                          <span
+                            key={index}
+                            className="inline-block px-2 py-1 text-xs bg-slate-100 text-slate-700 rounded-md"
+                          >
+                            {tag.trim()}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      <AddStaffModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onStaffAdded={handleStaffAdded}
+      />
     </div>
   );
 };
