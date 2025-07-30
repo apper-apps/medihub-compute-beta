@@ -1,0 +1,58 @@
+[
+  {
+    "Id": 1,
+    "type": "admission",
+    "description": "New patient admitted to Emergency Department",
+    "timestamp": "2024-01-21T14:30:00Z",
+    "user": "Dr. Sarah Johnson"
+  },
+  {
+    "Id": 2,
+    "type": "discharge",
+    "description": "Patient discharged from General Ward - Recovery complete",
+    "timestamp": "2024-01-21T13:15:00Z",
+    "user": "Dr. Michael Chen"
+  },
+  {
+    "Id": 3,
+    "type": "appointment",
+    "description": "Cardiac consultation scheduled for tomorrow",
+    "timestamp": "2024-01-21T12:45:00Z",
+    "user": "Nurse Patricia"
+  },
+  {
+    "Id": 4,
+    "type": "treatment",
+    "description": "Surgical procedure completed successfully",
+    "timestamp": "2024-01-21T11:20:00Z",
+    "user": "Dr. James Lee"
+  },
+  {
+    "Id": 5,
+    "type": "prescription",
+    "description": "New medication prescribed for hypertension patient",
+    "timestamp": "2024-01-21T10:30:00Z",
+    "user": "Dr. Lisa Park"
+  },
+  {
+    "Id": 6,
+    "type": "admission",
+    "description": "Emergency admission - Stroke patient transferred to ICU",
+    "timestamp": "2024-01-21T09:15:00Z",
+    "user": "Dr. Michael Chen"
+  },
+  {
+    "Id": 7,
+    "type": "treatment",
+    "description": "Physical therapy session completed",
+    "timestamp": "2024-01-21T08:45:00Z",
+    "user": "Therapist Alex"
+  },
+  {
+    "Id": 8,
+    "type": "appointment",
+    "description": "Follow-up appointment scheduled for post-surgery patient",
+    "timestamp": "2024-01-21T08:00:00Z",
+    "user": "Receptionist Maria"
+  }
+]

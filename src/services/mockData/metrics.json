@@ -1,0 +1,30 @@
+[
+  {
+    "Id": 1,
+    "label": "Total Patients",
+    "value": "1,248",
+    "trend": 8.5,
+    "icon": "Users"
+  },
+  {
+    "Id": 2,
+    "label": "Today's Appointments",
+    "value": "42",
+    "trend": -2.1,
+    "icon": "Calendar"
+  },
+  {
+    "Id": 3,
+    "label": "Available Beds",
+    "value": "26",
+    "trend": 0,
+    "icon": "Bed"
+  },
+  {
+    "Id": 4,
+    "label": "Pending Tasks",
+    "value": "18",
+    "trend": -15.3,
+    "icon": "CheckSquare"
+  }
+]
